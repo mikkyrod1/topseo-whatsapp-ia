@@ -9,11 +9,13 @@ Viene con un negocio de ejemplo inventado, «Taller Demo», que cambias por el t
 Video con todo el proceso, paso a paso: [ver el video](VIDEO_URL)
 
 Esta guía es para copiar y pegar. El video te enseña que funciona y por qué. Los minutos que ves en cada paso son los
-del video. Yo lo hice en una Mac; en Windows o Linux algunos comandos cambian.
+del video. Yo lo hice en una Mac, pero la guía también sirve en Linux y en Windows: en «Requisitos» eliges tu
+sistema, y de ahí en adelante los pasos son los mismos para todos.
 
 ## Antes de empezar: siete palabras
 
-- **Terminal**: una ventana donde le escribes instrucciones a tu computadora. En Mac se llama «Terminal».
+- **Terminal**: una ventana donde le escribes instrucciones a tu computadora. En Mac se llama «Terminal». En Windows
+  usarás la ventana de Ubuntu (ver «Requisitos»).
 - **API**: la puerta que Meta (o Anthropic) te abre para que tu programa hable con su sistema, con su permiso.
 - **Token (llave)**: la contraseña larga que abre esa puerta. Quien la tenga puede mandar mensajes a nombre de tu
   negocio. No se comparte.
@@ -28,23 +30,14 @@ del video. Yo lo hice en una Mac; en Windows o Linux algunos comandos cambian.
 
 ## Requisitos
 
-- **Cuenta de Facebook y registro como desarrollador de Meta.** Con tu cuenta de Facebook abierta, te registras aquí:
-  https://developers.facebook.com/documentation/development/register
-- **Python 3.11 o más nuevo** (con esa versión lo probé). Para ver cuál tienes, escribe en la terminal:
+### Elige tu sistema
 
-  ```bash
-  python3 --version
-  ```
+Instala las herramientas con la parte de tu sistema. Las demás no las necesitas.
 
-  Debe decir `Python 3.11` o un número más alto. Si sale un número menor, o la terminal no lo encuentra, instala la
-  versión nueva desde https://www.python.org/downloads/ y vuelve a revisar.
-- **Llave de API de Anthropic** (la IA): la creas en https://platform.claude.com/settings/keys. Al crearla, elige que
-  funcione en un solo workspace (por ejemplo, el que viene por defecto). Así el programa la usa tal cual.
-- **Saldo en Anthropic.** La API de Anthropic cobra por uso: necesitas saldo para que el bot conteste. Precios
-  oficiales: https://platform.claude.com/docs/en/about-claude/pricing (el saldo se compra en
-  https://platform.claude.com/settings/billing).
-- **Homebrew** (en Mac, para instalar lo demás). Si al escribir `brew` la terminal dice que no lo encuentra, instálalo
-  con el comando que da su página oficial (https://brew.sh/). Es este:
+#### Mac
+
+- **Homebrew**, para instalar lo demás. Si al escribir `brew` la terminal dice que no lo encuentra, instálalo con el
+  comando que da su página oficial (https://brew.sh/). Es este:
 
   ```bash
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -52,11 +45,84 @@ del video. Yo lo hice en una Mac; en Windows o Linux algunos comandos cambian.
 
   Al terminar, Homebrew te muestra una sección 'Next steps' con unos comandos: cópialos y córrelos en la terminal antes de seguir.
 
-- **cloudflared** (el túnel): https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/
-  En Mac se instala con Homebrew. Lo instalamos en el paso g.
+- **Python**: si te falta o tienes uno viejo (lo revisas más abajo), instálalo desde https://www.python.org/downloads/
 - **git**, para bajar el código: https://git-scm.com/downloads
-- **jq**, para que las respuestas de Meta se lean bonito en la terminal: https://jqlang.org/download/ (en Mac:
-  `brew install jq`).
+- **jq**, para que las respuestas de Meta se lean bonito en la terminal: `brew install jq` (https://jqlang.org/download/)
+- **cloudflared** (el túnel): se instala con Homebrew en el paso g.
+
+#### Linux (Ubuntu/Debian)
+
+Necesitas un usuario que pueda usar sudo.
+
+Instala Python, git, curl y jq con un solo comando (te pide la contraseña de tu usuario):
+
+```bash
+sudo apt update && sudo apt install -y python3-full git curl jq
+```
+
+Después instala **cloudflared** (el túnel) desde el repositorio oficial de Cloudflare. Son cuatro comandos; pégalos uno
+por uno:
+
+```bash
+sudo mkdir -p --mode=0755 /usr/share/keyrings
+```
+
+```bash
+curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
+```
+
+```bash
+echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared any main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
+```
+
+```bash
+sudo apt-get update && sudo apt-get install cloudflared
+```
+
+Para comprobar que quedó, escribe `cloudflared --version`: debe decir `cloudflared version` y un número.
+
+Estos comandos los probé en Ubuntu 24.04 y Debian 12 limpios, con un usuario que puede usar `sudo`.
+
+Fuentes oficiales: Python en Ubuntu (https://ubuntu.com/developers/docs/howto/python-setup/), git
+(https://git-scm.com/install/linux), jq (https://jqlang.org/download/) y cloudflared (https://pkg.cloudflare.com/index.html).
+
+#### Windows (con WSL)
+
+WSL es Linux dentro de Windows: instalas Ubuntu una vez y, en su ventana, los comandos son los mismos que en Linux.
+
+1. Necesitas Windows 11, o Windows 10 versión 2004 (compilación 19041) o más nueva.
+2. Abre PowerShell como administrador (clic derecho → «Ejecutar como administrador»), escribe este comando y reinicia
+   la computadora. Instala WSL con Ubuntu:
+
+   ```
+   wsl --install
+   ```
+
+3. Abre **Ubuntu** desde el menú Inicio. La primera vez te pide crear un usuario y una contraseña para Linux (no
+   tienen que ser los de Windows). Al escribir la contraseña no se ve nada en pantalla: es normal. Esa contraseña es
+   la que te pide `sudo` en los comandos de Linux.
+4. En esa ventana de Ubuntu, sigue la parte de **Linux** de arriba. El resto de la guía también lo haces ahí.
+
+Guía oficial de Microsoft: https://learn.microsoft.com/es-es/windows/wsl/install
+
+### Para todos
+
+- **Python 3.11 o más nuevo** (con esa versión lo probé). Para ver cuál tienes, escribe en la terminal:
+
+  ```bash
+  python3 --version
+  ```
+
+  Debe decir `Python 3.11` o un número más alto. Si sale un número menor, o la terminal no lo encuentra: en Mac, instala
+  la versión nueva desde https://www.python.org/downloads/; en Linux o WSL, usa Ubuntu 24.04 (trae Python 3.12)
+  o Debian 12 (trae 3.11), o una versión más nueva. Luego vuelve a revisar.
+- **Cuenta de Facebook y registro como desarrollador de Meta.** Con tu cuenta de Facebook abierta, te registras aquí:
+  https://developers.facebook.com/documentation/development/register
+- **Llave de API de Anthropic** (la IA): la creas en https://platform.claude.com/settings/keys. Al crearla, elige que
+  funcione en un solo workspace (por ejemplo, el que viene por defecto). Así el programa la usa tal cual.
+- **Saldo en Anthropic.** La API de Anthropic cobra por uso: necesitas saldo para que el bot conteste. Precios
+  oficiales: https://platform.claude.com/docs/en/about-claude/pricing (el saldo se compra en
+  https://platform.claude.com/settings/billing).
 - Tu celular con WhatsApp, para probar.
 
 ## Pasos
@@ -178,11 +244,15 @@ Copia la plantilla del archivo de configuración:
 cp .env.example .env
 ```
 
-Ábrelo para llenarlo (en Mac se abre en TextEdit):
+Ábrelo para llenarlo. En Mac se abre en TextEdit:
 
 ```bash
 open -e .env
 ```
+
+> **Linux o WSL:** usa `nano .env` en lugar de `open -e .env` (y `nano servidor.py` si luego editas el código). Se
+> abre dentro de la terminal; al terminar, guarda con
+> `Ctrl+O` y `Enter`, y sal con `Ctrl+X`.
 
 En el video la plantilla se ve un poco distinta; usa la de este repo, que es la actualizada.
 
@@ -221,6 +291,7 @@ Arranca el servidor:
 - **Cómo sabes que quedó:** la terminal dice `Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)`. Abre
   http://127.0.0.1:8000/salud en tu navegador: debe decir `{"estado":"ok"}`. En http://127.0.0.1:8000/prompt ves las
   instrucciones que lee la IA.
+- **WSL:** en el navegador de Windows, entra con `localhost`: http://localhost:8000/salud
 - Si falta algo en tu `.env`, no arranca y te dice qué: `servidor.py no arranca: faltan variables en .env: …`
 - Deja esa ventana abierta. Si cambias el `.env` o el prompt, detén el servidor con `CTRL+C` y vuelve a arrancarlo: lee
   todo al arrancar. A mí me pasó: cambié la llave y el bot seguía fallando, porque el servidor tenía la vieja en
@@ -229,11 +300,14 @@ Arranca el servidor:
 
 ### g. Abrir el túnel
 
-Abre **otra** ventana de la terminal (la del servidor sigue corriendo). Instala cloudflared (en Mac con Homebrew):
+Abre **otra** ventana de la terminal (la del servidor sigue corriendo; en Windows, abre Ubuntu otra vez desde el menú
+Inicio). Instala cloudflared (en Mac con Homebrew):
 
 ```bash
 brew install cloudflared
 ```
+
+> **Linux o WSL:** ya lo instalaste en «Requisitos»; salta este comando.
 
 Abre el túnel:
 
