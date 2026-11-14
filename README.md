@@ -140,7 +140,7 @@ Guía oficial de Microsoft: https://learn.microsoft.com/es-es/windows/wsl/instal
   6. Conecta la app a una cuenta de WhatsApp Business: eliges la tuya y confirmas. Ahí vive tu número.
 - **Cómo sabes que quedó:** en el panel de tu app aparece el caso de uso de WhatsApp («Personalizar el caso de uso
   Conectarte con los clientes a través de WhatsApp»).
-- **En el video:** 01:52 (lista de apps), 02:06 (nombre y correo), 02:23 (caso de uso), 03:09 (conectar la cuenta).
+- **En el video:** 02:18 (lista de apps), 02:32 (nombre y correo), 02:49 (caso de uso), 03:35 (conectar la cuenta).
 
 ### b. Número de prueba y lista «Para»
 
@@ -152,10 +152,10 @@ Guía oficial de Microsoft: https://learn.microsoft.com/es-es/windows/wsl/instal
      `META_MESSAGING_ACCOUNT_ID`. Es el de la cuenta donde vive el número (lo usamos en el paso i).
   4. En **Para**, agrega tu propio celular con los pasos que te pide Meta. Con la app sin publicar, el bot recibe y responde mensajes de los números que agregaste a la lista de destinatarios.
 - **Cómo sabes que quedó:** en **De** se ve el número de prueba y, abajo, sus identificadores.
-- **En el video:** 03:35 (Configuración de la API), 03:56 (número e identificadores), 04:13 (campo «Para»).
+- **En el video:** 04:01 (Configuración de la API), 04:22 (número e identificadores), 04:39 (campo «Para»).
 
 Ojo: el botón **Generar token de acceso** de esa página da una llave temporal, que dura menos de 24 horas. Sirve para
-probar un rato, no para un bot. La llave buena sale del paso c. (En el video: 04:52.)
+probar un rato, no para un bot. La llave buena sale del paso c. (En el video: 05:18.)
 
 ### c. Usuario del sistema y token permanente
 
@@ -167,13 +167,13 @@ alguien de tu equipo siga en el negocio.
 - **Qué haces:**
   1. Crea un usuario del sistema nuevo.
   2. Dale acceso a tu app y a la cuenta de mensajes donde vive tu número, la del paso b. En la configuración de mi
-     portafolio se ve con su nombre, «Test Messaging Account», y abajo dice «Messaging account» (en el video: 14:35).
+     portafolio se ve con su nombre, «Test Messaging Account», y abajo dice «Messaging account» (en el video: 15:01).
   3. Clic en **Generar token**. Meta te pide tres cosas, una por pantalla: la app, la caducidad (elige que no caduque
      nunca) y los permisos. Marca `whatsapp_business_messaging` y `whatsapp_business_management`. Con esos dos me
      funcionó todo; la guía oficial de Meta pide además `business_management`.
   4. Copia el token y guárdalo en tu `.env` como `META_ACCESS_TOKEN`. No lo pegues en ningún chat.
 - **Cómo sabes que quedó:** lo compruebas en el paso d con el primer comando.
-- **En el video:** 05:37 (usuarios del sistema), 05:59 (generar token).
+- **En el video:** 06:03 (usuarios del sistema), 06:25 (generar token).
 - Guía oficial de Meta (pasos 1 a 5): https://developers.facebook.com/documentation/business-messaging/whatsapp/get-started
 
 ### d. Consultar y registrar el número
@@ -196,7 +196,7 @@ curl -s "https://graph.facebook.com/$META_GRAPH_VERSION/debug_token?input_token=
 ```
 
 Cómo sabes que está bien: `"type": "SYSTEM_USER"`, el nombre de tu app en `"application"`, `"expires_at": 0` (cero
-quiere decir que no caduca), `"is_valid": true` y, en `"scopes"`, los dos permisos de WhatsApp. En el video: 07:01.
+quiere decir que no caduca), `"is_valid": true` y, en `"scopes"`, los dos permisos de WhatsApp. En el video: 07:27.
 
 **2. Pregúntale a Meta cómo está tu número.**
 
@@ -205,7 +205,7 @@ curl -s "https://graph.facebook.com/$META_GRAPH_VERSION/$META_PHONE_NUMBER_ID?fi
 ```
 
 Cómo sabes que está bien: `"status": "CONNECTED"`. Si dice `"PENDING"`, te falta registrarlo (abajo). A mí la primera
-vez me salió `PENDING`, y WhatsApp decía que ese número no estaba en WhatsApp. En el video: 07:31.
+vez me salió `PENDING`, y WhatsApp decía que ese número no estaba en WhatsApp. En el video: 07:57.
 
 **3. Solo si salió `PENDING`: registra el número.** Meta solo deja registrarlo por la API. Lleva un PIN de seis
 dígitos: si tu número ya tiene verificación en dos pasos, es ese PIN; si no, inventa uno de seis dígitos y ese queda
@@ -219,7 +219,7 @@ curl -s -X POST "https://graph.facebook.com/$META_GRAPH_VERSION/$META_PHONE_NUMB
 ```
 
 Cómo sabes que quedó: Meta contesta `"success": true`. Repite el comando 2: ahora debe decir `CONNECTED`. En el
-video: 08:16 (registro) y 08:40 (respuesta).
+video: 08:42 (registro) y 09:06 (respuesta).
 Documentación oficial: https://developers.facebook.com/documentation/business-messaging/whatsapp/business-phone-numbers/registration/
 
 ### e. Llenar el .env
@@ -272,7 +272,7 @@ Llena cada línea después del `=`, sin espacios ni comillas:
 
 Guarda el archivo. Se queda solo en tu computadora.
 
-- **En el video:** 06:14 y 10:57 (la plantilla), 10:39 (los comandos).
+- **En el video:** 06:40 y 11:23 (la plantilla), 11:05 (los comandos).
 
 ### f. Correr el servidor
 
@@ -296,7 +296,7 @@ Arranca el servidor:
 - Deja esa ventana abierta. Si cambias el `.env` o el prompt, detén el servidor con `CTRL+C` y vuelve a arrancarlo: lee
   todo al arrancar. A mí me pasó: cambié la llave y el bot seguía fallando, porque el servidor tenía la vieja en
   memoria.
-- **En el video:** 10:39 (el comando) y 16:38 (la página del prompt).
+- **En el video:** 11:05 (el comando) y 17:04 (la página del prompt).
 
 ### g. Abrir el túnel
 
@@ -319,7 +319,7 @@ cloudflared tunnel --url http://127.0.0.1:8000
   `https://algo-al-azar.trycloudflare.com`. Esa es tu dirección pública.
 - Es temporal: cada vez que abres el túnel te da una distinta, y si cierras esa ventana o apagas tu computadora, se
   cae. Déjala abierta mientras pruebas. Si la dirección cambia, repite el paso h con la nueva.
-- **En el video:** 11:15 (instalar), 11:34 (abrir), 11:45 (la dirección).
+- **En el video:** 11:41 (instalar), 12:00 (abrir), 12:11 (la dirección).
 - Documentación oficial: https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/
 
 ### h. Webhook y «Verificar y guardar»
@@ -336,14 +336,14 @@ mensajes (este paso) y suscribir la app a la cuenta que tiene el número (paso i
   4. Más abajo, en **Campos del webhook**, busca `messages` y suscríbete (debe decir **Suscritos**).
 - **Cómo sabes que quedó:** la dirección se queda guardada en el campo y, en la ventana del servidor, aparece una línea
   con `Webhook verificado por Meta`.
-- **En el video:** 12:06 (las tres piezas), 12:45 (los dos campos), 13:03 (verificado), 13:18 (`messages`).
+- **En el video:** 12:32 (las tres piezas), 13:11 (los dos campos), 13:29 (verificado), 13:44 (`messages`).
 - Documentación oficial: https://developers.facebook.com/documentation/business-messaging/whatsapp/webhooks/create-webhook-endpoint/
 
 ### i. Suscribir la app (Messaging account)
 
 Aquí está la trampa en la que yo caí. En mi portafolio había dos cuentas: «WhatsApp account» y «Messaging account». El
 número vivía en la Messaging account, y la suscripción solo funciona en la cuenta donde vive el número.
-En el video, a las 14:12, la primera cuenta que pruebo da error 2388339: esa es la equivocada. Usa la Messaging account.
+En el video, a las 14:38, la primera cuenta que pruebo da error 2388339: esa es la equivocada. Usa la Messaging account.
 
 En la terminal del paso d (con tu `.env` cargado), primero confirma que tu cuenta tiene tu número:
 
@@ -369,8 +369,8 @@ curl -s "https://graph.facebook.com/$META_GRAPH_VERSION/$META_MESSAGING_ACCOUNT_
 Ahí aparece el nombre de tu app. A mí, antes de esto, esa lista salía vacía, y a partir de aquí empezaron a llegar
 los mensajes.
 
-- **En el video:** 14:03 (la cuenta equivocada), 14:35 (de dónde sale el identificador), 14:55 (la cuenta buena),
-  15:15 (suscripción).
+- **En el video:** 14:29 (la cuenta equivocada), 15:01 (de dónde sale el identificador), 15:21 (la cuenta buena),
+  15:41 (suscripción).
 
 ### j. Probar desde WhatsApp
 
@@ -378,18 +378,18 @@ Con el servidor y el túnel abiertos, escríbele al número de prueba desde el c
 algo que contestaría tu negocio, por ejemplo: «¿Qué servicios tienen y en qué horario atienden?».
 
 - **Cómo sabes que funciona:** en unos segundos llega la respuesta, escrita por la IA con los datos del prompt.
-- **En el video:** 18:31 (el mensaje) y 18:42 (la respuesta).
+- **En el video:** 18:57 (el mensaje) y 19:08 (la respuesta).
 
 ## Errores comunes
 
 **«Object with ID '…' does not exist» al elegir el número en el panel.** A mí el panel me marcaba que el número no
 existía, y sí existía. Por la API, con la llave permanente, me lo regresó completo. Si el panel te falla, haz lo mismo
-por la API: el comando 2 del paso d y, si sale `PENDING`, el registro. En el video: 04:28.
+por la API: el comando 2 del paso d y, si sale `PENDING`, el registro. En el video: 04:54.
 
 **Error `2388339` («This API is not supported for this WhatsApp Business Account»).** Estás usando la cuenta
 equivocada. Usa la Messaging account, la que tiene tu número: es el **Identificador de la cuenta de mensajes** de
 Configuración de la API, y también sale en la configuración de tu portafolio, en las cuentas de WhatsApp. Ponlo en
-`META_MESSAGING_ACCOUNT_ID`, vuelve a cargar el `.env` y repite el paso i. En el video: 14:03 y 14:35.
+`META_MESSAGING_ACCOUNT_ID`, vuelve a cargar el `.env` y repite el paso i. En el video: 14:29 y 15:01.
 
 **Error `131030` («Recipient phone number not in allowed list») si estás en México.** Cuando te escribes desde un
 celular de México, el aviso de Meta trae tu número como `521` más 10 dígitos. Si le contestas a ese número, Meta lo
@@ -402,13 +402,13 @@ dígitos, sin `+` ni espacios.
 curl -s -X POST "https://graph.facebook.com/$META_GRAPH_VERSION/$META_PHONE_NUMBER_ID/messages" -H "Authorization: Bearer $META_ACCESS_TOKEN" -H "Content-Type: application/json" -d '{"messaging_product":"whatsapp","to":"TU_NUMERO_WHATSAPP","type":"text","text":{"body":"Prueba con 52"}}' | jq
 ```
 
-Si sale bien, contesta con `"messages"` y te llega «Prueba con 52». En el video: 15:42 (el error), 15:57 (sin el 1)
-y 16:25 (la función del servidor).
+Si sale bien, contesta con `"messages"` y te llega «Prueba con 52». En el video: 16:08 (el error), 16:23 (sin el 1)
+y 16:51 (la función del servidor).
 
 **El bot inventa servicios o precios.** La IA solo sabe lo que trae el prompt. Sin tus datos, rellena los huecos con
 cosas que suenan bien pero que tu negocio a lo mejor ni ofrece. Abre `servidor.py`, busca `NEGOCIO_DEMO` y cambia
 «Taller Demo» por tu nombre, tu giro, tus servicios y tu horario. Guarda y reinicia el servidor. Las reglas del prompt
-(`SYSTEM_PROMPT`) le piden contestar solo con esa información y pasar lo demás a un asesor. En el video: 16:38 y 17:21.
+(`SYSTEM_PROMPT`) le piden contestar solo con esa información y pasar lo demás a un asesor. En el video: 17:04 y 17:47.
 
 **Cambiaste el `.env` y sigue fallando.** Reinicia el servidor (paso f).
 
@@ -416,7 +416,7 @@ cosas que suenan bien pero que tu negocio a lo mejor ni ofrece. Abre `servidor.p
 
 El túnel es temporal: depende de que tu computadora esté prendida y la dirección cambia cada vez. Para atender
 clientes de verdad, el programa tiene que vivir en un servidor fijo, prendido todo el día y con una dirección que no
-cambie. Esa dirección es la que pones en el webhook. En el video: 20:52.
+cambie. Esa dirección es la que pones en el webhook. En el video: 21:18.
 
 ## Seguridad
 
