@@ -436,4 +436,4 @@ El código es MIT. Lo puedes usar, cambiar y compartir. El texto completo está 
 
 ## Créditos
 
-TopSEO by SEO en México. Canal: [TopSEO en YouTube](CANAL_URL)
+TopSEO by SEO en México. Canal: [TopSEO en YouTube](https://www.youtube.com/@TOPSEO)
